@@ -1,4 +1,5 @@
 const $arenas = document.querySelector(".arenas");
+const $randomBtn = document.querySelector(".button");
 
 const subzero = {
   player: 1,
@@ -14,7 +15,7 @@ const subzero = {
 const scorpion = {
   player: 2,
   name: "Scorpion",
-  hp: 80,
+  hp: 100,
   img: "http://reactmarathon-api.herokuapp.com/assets/scorpion.gif",
   weapon: ["Knife", "Blade", "DualSword"],
   attack() {
@@ -52,5 +53,31 @@ function createPlayer(character) {
 
   return player;
 }
+
+function changeHP(character) {
+  const $playerLife = document.querySelector(
+    ".player" + character.player + " .life"
+  );
+  character.hp -= 20;
+  character.hp < 0 && character.hp === 0
+    ? ($playerLife.style.width = 0)
+    : ($playerLife.style.width = character.hp + "%");
+
+  if (character.hp < 0) {
+    $arenas.appendChild(playerLose(character.name));
+  }
+}
+
+function playerLose(name) {
+  const $loseTitle = createElement("div", "loseTitle");
+  $loseTitle.innerText = name + " lose";
+
+  return $loseTitle;
+}
+
+$randomBtn.addEventListener("click", function () {
+  changeHP(scorpion);
+  changeHP(subzero);
+});
 
 $arenas.append(createPlayer(subzero), createPlayer(scorpion));
