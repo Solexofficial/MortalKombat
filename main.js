@@ -54,11 +54,15 @@ function createPlayer(character) {
   return player;
 }
 
+function randomNum(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 function changeHP(character) {
   const $playerLife = document.querySelector(
     ".player" + character.player + " .life"
   );
-  character.hp -= 20;
+  character.hp -= randomNum(1, 20);
   character.hp < 0 && character.hp === 0
     ? ($playerLife.style.width = 0)
     : ($playerLife.style.width = character.hp + "%");
