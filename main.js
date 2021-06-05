@@ -67,28 +67,35 @@ function changeHP(character) {
     ? ($playerLife.style.width = 0)
     : ($playerLife.style.width = character.hp + "%");
 
-  if (character.hp <= 0) {
-    $arenas.appendChild(playerWinner(getWinner(scorpion, subzero)));
-  }
   console.log(character.name, character.hp);
 }
 
-function playerWinner(name) {
-  const $winnerTitle = createElement("div", "winnerTitle");
-  $winnerTitle.innerText = name + " Wins!";
-  $randomBtn.disabled = true;
-  $randomBtn.style.background = "#333";
-  return $winnerTitle;
+function disableBtn(btn) {
+  btn.disabled = true;
+  btn.style.background = "#333";
 }
 
-function getWinner(player1, player2) {
-  return player1.hp <= 0 ? player2.name : player1.name;
+function showWinner(name) {
+  const $winnerTitle = createElement("div", "winnerTitle");
+  $winnerTitle.innerText = name != "DRAW" ? name + " Wins!" : "DRAW";
+  $arenas.appendChild($winnerTitle);
+  disableBtn($randomBtn);
+}
+
+function whoWinner(player1, player2) {
+  if (player1.hp < 0 && player2.hp < 0) {
+    showWinner("DRAW");
+  } else if (player1.hp <= 0) {
+    showWinner(player2.name);
+  } else if (player2.hp <= 0) {
+    showWinner(player1.name);
+  }
 }
 
 $randomBtn.addEventListener("click", function () {
   changeHP(scorpion);
   changeHP(subzero);
-  getWinner(scorpion, subzero);
+  whoWinner(scorpion, subzero);
 });
 
 $arenas.append(createPlayer(subzero), createPlayer(scorpion));
