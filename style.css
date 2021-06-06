@@ -94,6 +94,10 @@ body {
   background-image: url(./assets/waterfront.png);
 }
 
+.arenas.arena6 {
+  background-image: url(./assets/mk3-subway-stage.gif);
+}
+
 .player1,
 .player2 {
   width: 50%;
