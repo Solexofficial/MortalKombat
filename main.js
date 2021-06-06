@@ -62,12 +62,14 @@ function changeHP(character) {
   const $playerLife = document.querySelector(
     ".player" + character.player + " .life"
   );
-  character.hp -= randomNum(1, 20);
-  character.hp < 0 && character.hp === 0
-    ? ($playerLife.style.width = 0)
-    : ($playerLife.style.width = character.hp + "%");
 
-  console.log(character.name, character.hp);
+  if (character.hp > 0) {
+    randomNum(1, 20);
+  } else {
+    character.hp = 0;
+  }
+
+  $playerLife.style.width = character.hp + "%";
 }
 
 function disableBtn(btn) {
@@ -83,7 +85,7 @@ function showWinner(name) {
 }
 
 function whoWinner(player1, player2) {
-  if (player1.hp < 0 && player2.hp < 0) {
+  if (player1.hp <= 0 && player2.hp <= 0) {
     showWinner("DRAW");
   } else if (player1.hp <= 0) {
     showWinner(player2.name);
