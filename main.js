@@ -64,12 +64,13 @@ function changeHP(character) {
   );
 
   if (character.hp > 0) {
-    randomNum(1, 20);
+    character.hp -= randomNum(1, 20);
   } else {
     character.hp = 0;
   }
 
   $playerLife.style.width = character.hp + "%";
+  console.log(character.hp, character.name);
 }
 
 function disableBtn(btn) {
