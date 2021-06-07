@@ -91,6 +91,7 @@ function showWinner(name) {
   $winnerTitle.innerText = name != "DRAW" ? name + " Wins!" : "DRAW";
   $arenas.appendChild($winnerTitle);
   disableBtn($randomBtn);
+  showReloadButton();
 }
 
 function whoWinner(player1, player2) {
@@ -108,13 +109,24 @@ function createReloadButton() {
   const $button = createElement("button", "button");
   $button.innerText = "Restart";
   $buttonWrap.appendChild($button);
+  return $buttonWrap;
+}
+
+function showReloadButton() {
+  const $reloadBtn = createReloadButton();
+  $reloadBtn.addEventListener("click", () => {
+    window.location.reload();
+  });
+  return $arenas.append($reloadBtn);
 }
 
 $randomBtn.addEventListener("click", function () {
   subzero.changeHP(randomNum(1, 20));
   subzero.renderHP();
+
   scorpion.changeHP(randomNum(1, 20));
   scorpion.renderHP();
+
   whoWinner(scorpion, subzero);
 });
 
