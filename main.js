@@ -103,6 +103,13 @@ function whoWinner(player1, player2) {
   }
 }
 
+function createReloadButton() {
+  const $buttonWrap = createElement("div", "reloadWrap");
+  const $button = createElement("button", "button");
+  $button.innerText = "Restart";
+  $buttonWrap.appendChild($button);
+}
+
 $randomBtn.addEventListener("click", function () {
   subzero.changeHP(randomNum(1, 20));
   subzero.renderHP();
