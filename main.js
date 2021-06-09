@@ -1,6 +1,12 @@
 const $arenas = document.querySelector(".arenas");
 // const $randomBtn = document.querySelector(".button");
 const $formFight = document.querySelector(".control");
+const HIT = {
+  head: 30,
+  body: 25,
+  foot: 20,
+};
+const ATTACK = ["head", "body", "foot"];
 
 const subzero = {
   player: 1,
