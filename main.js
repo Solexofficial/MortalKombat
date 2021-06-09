@@ -137,9 +137,36 @@ function showReloadButton() {
 //   whoWinner(scorpion, subzero);
 // });
 
+function enemyAttack() {
+  const hit = ATTACK[randomNum(0, 2)];
+  const defence = ATTACK[randomNum(0, 2)];
+  return {
+    value: randomNum(1, HIT[hit]),
+    hit,
+    defence,
+  };
+}
+
 $formFight.addEventListener("submit", function (e) {
   e.preventDefault();
-  console.dir($formFight);
+  const enemy = enemyAttack();
+
+  const attack = {};
+
+  for (let item of $formFight) {
+    if (item.checked && item.name === "hit") {
+      attack.value = randomNum(1, HIT[item.value]);
+      attack.hit = item.value;
+    }
+
+    if (item.checked && item.name === "defence") {
+      attack.defence = item.value;
+    }
+    item.checked = false;
+  }
+
+  console.log("##### a", attack);
+  console.log("##### e", enemy);
 });
 
 $arenas.append(createPlayer(subzero), createPlayer(scorpion));
