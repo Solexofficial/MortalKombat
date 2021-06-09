@@ -382,7 +382,6 @@ form:invalid button[class="button"]:active::after {
   width: 80px;
   height: 50px;
   content: "";
-  transform: scaleY(1.2);
   z-index: -1;
   margin-bottom: -50px;
   transition: 0.3s;
