@@ -10,6 +10,9 @@ const subzero = {
   attack() {
     console.log(this.name + " Fight...");
   },
+  changeHP: changeHP,
+  elHP: elHP,
+  renderHP: renderHP,
 };
 
 const scorpion = {
@@ -21,6 +24,9 @@ const scorpion = {
   attack() {
     console.log(this.name + " Fight...");
   },
+  changeHP: changeHP,
+  elHP: elHP,
+  renderHP: renderHP,
 };
 
 function createElement(tag, className) {
@@ -58,18 +64,21 @@ function randomNum(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function changeHP(character) {
-  const $playerLife = document.querySelector(
-    ".player" + character.player + " .life"
-  );
-
-  character.hp -= randomNum(1, 20);
-
-  if (character.hp < 0) {
-    character.hp = 0;
+function changeHP(damageHit) {
+  this.hp -= damageHit;
+  if (this.hp < 0) {
+    this.hp = 0;
   }
+  return this.hp;
+}
 
-  $playerLife.style.width = character.hp + "%";
+function elHP() {
+  return document.querySelector(".player" + this.player + " .life");
+}
+
+function renderHP() {
+  let $el = this.elHP();
+  return ($el.style.width = this.hp + "%");
 }
 
 function disableBtn(btn) {
@@ -82,6 +91,7 @@ function showWinner(name) {
   $winnerTitle.innerText = name != "DRAW" ? name + " Wins!" : "DRAW";
   $arenas.appendChild($winnerTitle);
   disableBtn($randomBtn);
+  showReloadButton();
 }
 
 function whoWinner(player1, player2) {
@@ -94,9 +104,29 @@ function whoWinner(player1, player2) {
   }
 }
 
+function createReloadButton() {
+  const $buttonWrap = createElement("div", "reloadWrap");
+  const $button = createElement("button", "button");
+  $button.innerText = "Restart";
+  $buttonWrap.appendChild($button);
+  return $buttonWrap;
+}
+
+function showReloadButton() {
+  const $reloadBtn = createReloadButton();
+  $reloadBtn.addEventListener("click", () => {
+    window.location.reload();
+  });
+  return $arenas.append($reloadBtn);
+}
+
 $randomBtn.addEventListener("click", function () {
-  changeHP(scorpion);
-  changeHP(subzero);
+  subzero.changeHP(randomNum(1, 20));
+  subzero.renderHP();
+
+  scorpion.changeHP(randomNum(1, 20));
+  scorpion.renderHP();
+
   whoWinner(scorpion, subzero);
 });
 

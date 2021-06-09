@@ -266,6 +266,18 @@ body {
   top: 1px;
 }
 
+.reloadWrap {
+  position: absolute;
+  top: 8%;
+  z-index: 1000;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.reloadWrap .button {
+  margin-top: 0;
+}
+
 .winnerTitle {
   position: absolute;
   top: 25%;
