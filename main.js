@@ -1,5 +1,6 @@
 const $arenas = document.querySelector(".arenas");
-const $randomBtn = document.querySelector(".button");
+// const $randomBtn = document.querySelector(".button");
+const $formFight = document.querySelector(".control");
 
 const subzero = {
   player: 1,
@@ -120,14 +121,19 @@ function showReloadButton() {
   return $arenas.append($reloadBtn);
 }
 
-$randomBtn.addEventListener("click", function () {
-  subzero.changeHP(randomNum(1, 20));
-  subzero.renderHP();
+// $randomBtn.addEventListener("click", function () {
+//   subzero.changeHP(randomNum(1, 20));
+//   subzero.renderHP();
 
-  scorpion.changeHP(randomNum(1, 20));
-  scorpion.renderHP();
+//   scorpion.changeHP(randomNum(1, 20));
+//   scorpion.renderHP();
 
-  whoWinner(scorpion, subzero);
+//   whoWinner(scorpion, subzero);
+// });
+
+$formFight.addEventListener("submit", function (e) {
+  e.preventDefault();
+  console.dir($formFight);
 });
 
 $arenas.append(createPlayer(subzero), createPlayer(scorpion));
