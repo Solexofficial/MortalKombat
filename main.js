@@ -67,8 +67,8 @@ function createPlayer(character) {
   return player;
 }
 
-function randomNum(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+function getRandom(num) {
+  return Math.ceil(Math.random() * num);
 }
 
 function changeHP(damageHit) {
@@ -128,20 +128,20 @@ function showReloadButton() {
 }
 
 // $randomBtn.addEventListener("click", function () {
-//   subzero.changeHP(randomNum(1, 20));
+//   subzero.changeHP(getRandom(20));
 //   subzero.renderHP();
 
-//   scorpion.changeHP(randomNum(1, 20));
+//   scorpion.changeHP(getRandom(20));
 //   scorpion.renderHP();
 
 //   whoWinner(scorpion, subzero);
 // });
 
 function enemyAttack() {
-  const hit = ATTACK[randomNum(0, 2)];
-  const defence = ATTACK[randomNum(0, 2)];
+  const hit = ATTACK[getRandom(3) - 1];
+  const defence = ATTACK[getRandom(3) - 1];
   return {
-    value: randomNum(1, HIT[hit]),
+    value: getRandom(HIT[hit]),
     hit,
     defence,
   };
@@ -155,7 +155,7 @@ $formFight.addEventListener("submit", function (e) {
 
   for (let item of $formFight) {
     if (item.checked && item.name === "hit") {
-      attack.value = randomNum(1, HIT[item.value]);
+      attack.value = getRandom(HIT[item.value]);
       attack.hit = item.value;
     }
 
