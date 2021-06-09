@@ -10,9 +10,9 @@ const subzero = {
   attack() {
     console.log(this.name + " Fight...");
   },
-  changeHP: changeHP,
-  elHP: elHP,
-  renderHP: renderHP,
+  changeHP,
+  elHP,
+  renderHP,
 };
 
 const scorpion = {
@@ -24,9 +24,9 @@ const scorpion = {
   attack() {
     console.log(this.name + " Fight...");
   },
-  changeHP: changeHP,
-  elHP: elHP,
-  renderHP: renderHP,
+  changeHP,
+  elHP,
+  renderHP,
 };
 
 function createElement(tag, className) {
