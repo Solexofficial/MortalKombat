@@ -1,5 +1,5 @@
 const $arenas = document.querySelector(".arenas");
-// const $randomBtn = document.querySelector(".button");
+const $submitBtn = document.querySelector("button[type=submit]");
 const $formFight = document.querySelector(".control");
 const HIT = {
   head: 30,
@@ -88,16 +88,11 @@ function renderHP() {
   return ($el.style.width = this.hp + "%");
 }
 
-function disableBtn(btn) {
-  btn.disabled = true;
-  btn.style.background = "#333";
-}
-
 function showWinner(name) {
   const $winnerTitle = createElement("div", "winnerTitle");
   $winnerTitle.innerText = name != "DRAW" ? name + " Wins!" : "DRAW";
   $arenas.appendChild($winnerTitle);
-  disableBtn($randomBtn);
+  $formFight.style.display = "none";
   showReloadButton();
 }
 
@@ -127,16 +122,6 @@ function showReloadButton() {
   return $arenas.append($reloadBtn);
 }
 
-// $randomBtn.addEventListener("click", function () {
-//   subzero.changeHP(getRandom(20));
-//   subzero.renderHP();
-
-//   scorpion.changeHP(getRandom(20));
-//   scorpion.renderHP();
-
-//   whoWinner(scorpion, subzero);
-// });
-
 function enemyAttack() {
   const hit = ATTACK[getRandom(3) - 1];
   const defence = ATTACK[getRandom(3) - 1];
@@ -147,10 +132,7 @@ function enemyAttack() {
   };
 }
 
-$formFight.addEventListener("submit", function (e) {
-  e.preventDefault();
-  const enemy = enemyAttack();
-
+function playerAttack() {
   const attack = {};
 
   for (let item of $formFight) {
@@ -165,8 +147,28 @@ $formFight.addEventListener("submit", function (e) {
     item.checked = false;
   }
 
-  console.log("##### a", attack);
-  console.log("##### e", enemy);
+  return attack;
+}
+
+function fight(player1, player2) {
+  const player = playerAttack();
+  const enemy = enemyAttack();
+
+  if (player.hit !== enemy.defence) {
+    player1.changeHP(player.value);
+    player1.renderHP();
+  }
+
+  if (enemy.hit !== player.defence) {
+    player2.changeHP(enemy.value);
+    player2.renderHP();
+  }
+}
+
+$formFight.addEventListener("submit", function (e) {
+  e.preventDefault();
+  fight(subzero, scorpion);
+  whoWinner(subzero, scorpion);
 });
 
 $arenas.append(createPlayer(subzero), createPlayer(scorpion));
