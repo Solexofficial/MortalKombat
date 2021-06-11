@@ -191,11 +191,6 @@ function playerAttack() {
   return attack;
 }
 
-function botAttack(hit, defence, target) {
-  if (enemy.hit !== target.defence) {
-  }
-}
-
 function fight(player1, player2) {
   const player = playerAttack();
   const enemy = enemyAttack();
