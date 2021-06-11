@@ -150,18 +150,23 @@ function playerAttack() {
   return attack;
 }
 
+function botAttack(hit, defence, target) {
+  if (enemy.hit !== target.defence) {
+  }
+}
+
 function fight(player1, player2) {
   const player = playerAttack();
   const enemy = enemyAttack();
 
   if (player.hit !== enemy.defence) {
-    player1.changeHP(player.value);
-    player1.renderHP();
+    player2.changeHP(player.value);
+    player2.renderHP();
   }
 
   if (enemy.hit !== player.defence) {
-    player2.changeHP(enemy.value);
-    player2.renderHP();
+    player1.changeHP(enemy.value);
+    player1.renderHP();
   }
 }
 
