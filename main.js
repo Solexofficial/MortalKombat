@@ -1,5 +1,12 @@
 const $arenas = document.querySelector(".arenas");
-const $randomBtn = document.querySelector(".button");
+const $submitBtn = document.querySelector("button[type=submit]");
+const $formFight = document.querySelector(".control");
+const HIT = {
+  head: 30,
+  body: 25,
+  foot: 20,
+};
+const ATTACK = ["head", "body", "foot"];
 
 const subzero = {
   player: 1,
@@ -10,9 +17,9 @@ const subzero = {
   attack() {
     console.log(this.name + " Fight...");
   },
-  changeHP: changeHP,
-  elHP: elHP,
-  renderHP: renderHP,
+  changeHP,
+  elHP,
+  renderHP,
 };
 
 const scorpion = {
@@ -24,9 +31,9 @@ const scorpion = {
   attack() {
     console.log(this.name + " Fight...");
   },
-  changeHP: changeHP,
-  elHP: elHP,
-  renderHP: renderHP,
+  changeHP,
+  elHP,
+  renderHP,
 };
 
 function createElement(tag, className) {
@@ -60,8 +67,8 @@ function createPlayer(character) {
   return player;
 }
 
-function randomNum(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+function getRandom(num) {
+  return Math.ceil(Math.random() * num);
 }
 
 function changeHP(damageHit) {
@@ -81,16 +88,11 @@ function renderHP() {
   return ($el.style.width = this.hp + "%");
 }
 
-function disableBtn(btn) {
-  btn.disabled = true;
-  btn.style.background = "#333";
-}
-
 function showWinner(name) {
   const $winnerTitle = createElement("div", "winnerTitle");
   $winnerTitle.innerText = name != "DRAW" ? name + " Wins!" : "DRAW";
   $arenas.appendChild($winnerTitle);
-  disableBtn($randomBtn);
+  $formFight.style.display = "none";
   showReloadButton();
 }
 
@@ -120,14 +122,58 @@ function showReloadButton() {
   return $arenas.append($reloadBtn);
 }
 
-$randomBtn.addEventListener("click", function () {
-  subzero.changeHP(randomNum(1, 20));
-  subzero.renderHP();
+function enemyAttack() {
+  const hit = ATTACK[getRandom(3) - 1];
+  const defence = ATTACK[getRandom(3) - 1];
+  return {
+    value: getRandom(HIT[hit]),
+    hit,
+    defence,
+  };
+}
 
-  scorpion.changeHP(randomNum(1, 20));
-  scorpion.renderHP();
+function playerAttack() {
+  const attack = {};
 
-  whoWinner(scorpion, subzero);
+  for (let item of $formFight) {
+    if (item.checked && item.name === "hit") {
+      attack.value = getRandom(HIT[item.value]);
+      attack.hit = item.value;
+    }
+
+    if (item.checked && item.name === "defence") {
+      attack.defence = item.value;
+    }
+    item.checked = false;
+  }
+
+  return attack;
+}
+
+function botAttack(hit, defence, target) {
+  if (enemy.hit !== target.defence) {
+  }
+}
+
+function fight(player1, player2) {
+  const player = playerAttack();
+  const enemy = enemyAttack();
+
+  if (player.hit !== enemy.defence) {
+    player2.changeHP(player.value);
+    player2.renderHP();
+  }
+
+  if (enemy.hit !== player.defence) {
+    player1.changeHP(enemy.value);
+    player1.renderHP();
+  }
+}
+
+$formFight.addEventListener("submit", function (e) {
+  e.preventDefault();
+  fight(subzero, scorpion);
+  whoWinner(subzero, scorpion);
 });
 
 $arenas.append(createPlayer(subzero), createPlayer(scorpion));
