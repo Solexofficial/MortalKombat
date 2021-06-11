@@ -180,6 +180,10 @@ body {
   background-size: cover;
   background-position: center;
   border-top: 4px solid #f5d100;
+  padding: 6px 40px;
+  overflow: scroll;
+  color: white;
+  font-family: Arial;
 }
 
 .character {
