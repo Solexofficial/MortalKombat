@@ -307,6 +307,7 @@ body {
 }
 
 form:invalid button[class="button"] {
+  pointer-events: none;
   opacity: 0.9;
   cursor: not-allowed;
 }
