@@ -152,10 +152,13 @@ function showWinner(name) {
 
 function whoWinner(player1, player2) {
   if (player1.hp <= 0 && player2.hp <= 0) {
+    generateLogs("draw");
     showWinner("DRAW");
   } else if (player1.hp <= 0) {
+    generateLogs("end", player2, player1);
     showWinner(player2.name);
   } else if (player2.hp <= 0) {
+    generateLogs("end", player1, player2);
     showWinner(player1.name);
   }
 }
@@ -208,43 +211,80 @@ function fight(player1, player2) {
   const player = playerAttack();
   const enemy = enemyAttack();
 
-  switch (true) {
-    case player.hit !== enemy.defence:
-      player2.changeHP(player.value);
-      player2.renderHP();
-      generateLogs("hit", player1, player2);
-    case player.hit === enemy.defence:
-      generateLogs("defence", player1, player2);
-  }
+  console.log("player: ", player);
+  console.log("enemy: ", enemy);
+
+  // switch (true) {
+  //   case player.hit === enemy.defence:
+  //     generateLogs("defence", player1, player2);
+
+  //   case enemy.defence === player.hit:
+  //     generateLogs("defence", player2, player1);
+
+  //   case player.hit !== enemy.defence:
+  //     player2.changeHP(player.value);
+  //     player2.renderHP();
+  //     generateLogs("hit", player1, player2);
+
+  //   case enemy.hit !== player.defence:
+  //     player1.changeHP(enemy.value);
+  //     player1.renderHP();
+  //     generateLogs("hit", player2, player1);
+  // }
 
   if (player.hit !== enemy.defence) {
     player2.changeHP(player.value);
     player2.renderHP();
     generateLogs("hit", player1, player2);
+  } else {
+    generateLogs("defence", player1, player2);
   }
 
   if (enemy.hit !== player.defence) {
     player1.changeHP(enemy.value);
     player1.renderHP();
     generateLogs("hit", player2, player1);
+  } else {
+    generateLogs("defence", player2, player1);
   }
 }
 
 function generateLogs(type, player1, player2) {
-  const text = logs[type][getRandom(logs[type].length - 1)]
-    .replace("[playerKick]", player1.name)
-    .replace("[playerDefence]", player2.name);
-  const el = `<p>${text}</p>`;
-  $chat.insertAdjacentHTML("afterbegin", el);
-}
-
-function initLogs(player1, player2) {
   const date = new Date();
-  const logsStartGame = logs.start
-    .replace("[time]", `${formatDate(date)}`)
-    .replace("[player1]", player1.name)
-    .replace("[player2]", player2.name);
-  $chat.insertAdjacentHTML("afterBegin", `<p>${logsStartGame}</p>`);
+  const time = formatDate(date);
+  switch (type) {
+    case "start":
+      const logsStartGame = logs.start
+        .replace("[time]", `${time}`)
+        .replace("[player1]", player1.name)
+        .replace("[player2]", player2.name);
+      return $chat.insertAdjacentHTML("afterBegin", `<p>${logsStartGame}</p>`);
+
+    case "hit":
+      const textHit = logs["hit"][getRandom(logs["hit"].length - 1)]
+        .replace("[playerKick]", player1.name)
+        .replace("[playerDefence]", player2.name);
+      const el = `<p>${time} ${textHit} -${player.value} [${player2.hp}/100]</p>`;
+      return $chat.insertAdjacentHTML("afterbegin", el);
+
+    case "defence":
+      const textDefence = logs["defence"][getRandom(logs["defence"].length - 1)]
+        .replace("[playerKick]", player1.name)
+        .replace("[playerDefence]", player2.name);
+      return $chat.insertAdjacentHTML(
+        "afterbegin",
+        `<p>${time} ${textDefence}</p>`
+      );
+
+    case "end":
+      const logEnd = logs["end"][getRandom(logs["end"].length - 1)]
+        .replace("[playerWins]", player1.name)
+        .replace("[playerLose]", player2.name);
+      return $chat.insertAdjacentHTML("afterbegin", logEnd);
+
+    case "draw":
+      return $chat.insertAdjacentHTML("afterbegin", logs["draw"]);
+  }
 }
 
 $formFight.addEventListener("submit", function (e) {
@@ -255,7 +295,7 @@ $formFight.addEventListener("submit", function (e) {
 
 function gameStart(player1, player2) {
   $arenas.append(createPlayer(player1), createPlayer(player2));
-  initLogs(player1, player2);
+  generateLogs("start", player1, player2);
 }
 
 gameStart(subzero, scorpion);
