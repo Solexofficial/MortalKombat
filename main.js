@@ -113,10 +113,17 @@ function getRandom(num) {
   return Math.ceil(Math.random() * num);
 }
 
-// function formatDate(date) {
-//   if (date.getHours < 10) {
-//   }
-// }
+function formatDate(date) {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let seconds = date.getSeconds();
+
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  seconds = seconds < 10 ? "0" + seconds : seconds;
+
+  return `${hours}:${minutes}:${seconds}`;
+}
 
 function changeHP(damageHit) {
   this.hp -= damageHit;
@@ -234,10 +241,7 @@ function generateLogs(type, player1, player2) {
 function initLogs(player1, player2) {
   const date = new Date();
   const logsStartGame = logs.start
-    .replace(
-      "[time]",
-      `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-    )
+    .replace("[time]", `${formatDate(date)}`)
     .replace("[player1]", player1.name)
     .replace("[player2]", player2.name);
   $chat.insertAdjacentHTML("afterBegin", `<p>${logsStartGame}</p>`);
