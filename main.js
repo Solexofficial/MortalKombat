@@ -1,6 +1,7 @@
 const $arenas = document.querySelector(".arenas");
 const $submitBtn = document.querySelector("button[type=submit]");
 const $formFight = document.querySelector(".control");
+const $chat = document.querySelector(".chat");
 const HIT = {
   head: 30,
   body: 25,
@@ -198,12 +199,23 @@ function fight(player1, player2) {
   if (player.hit !== enemy.defence) {
     player2.changeHP(player.value);
     player2.renderHP();
+    generateLogs("hit", player1, player2);
   }
 
   if (enemy.hit !== player.defence) {
     player1.changeHP(enemy.value);
     player1.renderHP();
+    generateLogs("hit", player2, player1);
   }
+}
+
+function generateLogs(type, player1, player2) {
+  const text = logs[type][0]
+    .replace("[playerKick]", player1.name)
+    .replace("[playerDefence]", player2.name);
+
+  const el = `<p>${text}</p>`;
+  $chat.insertAdjacentHTML("afterbegin", el);
 }
 
 $formFight.addEventListener("submit", function (e) {
