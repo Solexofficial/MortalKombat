@@ -113,6 +113,11 @@ function getRandom(num) {
   return Math.ceil(Math.random() * num);
 }
 
+// function formatDate(date) {
+//   if (date.getHours < 10) {
+//   }
+// }
+
 function changeHP(damageHit) {
   this.hp -= damageHit;
   if (this.hp < 0) {
@@ -132,7 +137,7 @@ function renderHP() {
 
 function showWinner(name) {
   const $winnerTitle = createElement("div", "winnerTitle");
-  $winnerTitle.innerText = name != "DRAW" ? name + " Wins!" : "DRAW";
+  $winnerTitle.innerText = name != "DRAW" ? `${name} Wins!` : "DRAW";
   $arenas.appendChild($winnerTitle);
   $formFight.style.display = "none";
   showReloadButton();
@@ -196,6 +201,15 @@ function fight(player1, player2) {
   const player = playerAttack();
   const enemy = enemyAttack();
 
+  switch (true) {
+    case player.hit !== enemy.defence:
+      player2.changeHP(player.value);
+      player2.renderHP();
+      generateLogs("hit", player1, player2);
+    case player.hit === enemy.defence:
+      generateLogs("defence", player1, player2);
+  }
+
   if (player.hit !== enemy.defence) {
     player2.changeHP(player.value);
     player2.renderHP();
@@ -210,12 +224,23 @@ function fight(player1, player2) {
 }
 
 function generateLogs(type, player1, player2) {
-  const text = logs[type][0]
+  const text = logs[type][getRandom(logs[type].length - 1)]
     .replace("[playerKick]", player1.name)
     .replace("[playerDefence]", player2.name);
-
   const el = `<p>${text}</p>`;
   $chat.insertAdjacentHTML("afterbegin", el);
+}
+
+function initLogs(player1, player2) {
+  const date = new Date();
+  const logsStartGame = logs.start
+    .replace(
+      "[time]",
+      `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    )
+    .replace("[player1]", player1.name)
+    .replace("[player2]", player2.name);
+  $chat.insertAdjacentHTML("afterBegin", `<p>${logsStartGame}</p>`);
 }
 
 $formFight.addEventListener("submit", function (e) {
@@ -224,4 +249,9 @@ $formFight.addEventListener("submit", function (e) {
   whoWinner(subzero, scorpion);
 });
 
-$arenas.append(createPlayer(subzero), createPlayer(scorpion));
+function gameStart(player1, player2) {
+  $arenas.append(createPlayer(player1), createPlayer(player2));
+  initLogs(player1, player2);
+}
+
+gameStart(subzero, scorpion);
