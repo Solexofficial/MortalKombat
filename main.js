@@ -56,9 +56,7 @@ const subzero = {
   hp: 100,
   img: "http://reactmarathon-api.herokuapp.com/assets/subzero.gif",
   weapon: ["Kunai", "Sword", "Axe"],
-  attack() {
-    console.log(this.name + " Fight...");
-  },
+  attack: playerAttack,
   changeHP,
   elHP,
   renderHP,
@@ -70,9 +68,7 @@ const scorpion = {
   hp: 100,
   img: "http://reactmarathon-api.herokuapp.com/assets/scorpion.gif",
   weapon: ["Knife", "Blade", "DualSword"],
-  attack() {
-    console.log(this.name + " Fight...");
-  },
+  attack: enemyAttack,
   changeHP,
   elHP,
   renderHP,
@@ -208,34 +204,16 @@ function playerAttack() {
 }
 
 function fight(player1, player2) {
-  const player = playerAttack();
-  const enemy = enemyAttack();
+  const player = player1.attack();
+  const enemy = player2.attack();
 
   console.log("player: ", player);
   console.log("enemy: ", enemy);
 
-  // switch (true) {
-  //   case player.hit === enemy.defence:
-  //     generateLogs("defence", player1, player2);
-
-  //   case enemy.defence === player.hit:
-  //     generateLogs("defence", player2, player1);
-
-  //   case player.hit !== enemy.defence:
-  //     player2.changeHP(player.value);
-  //     player2.renderHP();
-  //     generateLogs("hit", player1, player2);
-
-  //   case enemy.hit !== player.defence:
-  //     player1.changeHP(enemy.value);
-  //     player1.renderHP();
-  //     generateLogs("hit", player2, player1);
-  // }
-
   if (player.hit !== enemy.defence) {
     player2.changeHP(player.value);
     player2.renderHP();
-    generateLogs("hit", player1, player2);
+    generateLogs("hit", player1, player2, player.value);
   } else {
     generateLogs("defence", player1, player2);
   }
@@ -243,13 +221,13 @@ function fight(player1, player2) {
   if (enemy.hit !== player.defence) {
     player1.changeHP(enemy.value);
     player1.renderHP();
-    generateLogs("hit", player2, player1);
+    generateLogs("hit", player2, player1, enemy.value);
   } else {
     generateLogs("defence", player2, player1);
   }
 }
 
-function generateLogs(type, player1, player2) {
+function generateLogs(type, player1, player2, hitDamage) {
   const date = new Date();
   const time = formatDate(date);
   switch (type) {
@@ -264,7 +242,7 @@ function generateLogs(type, player1, player2) {
       const textHit = logs["hit"][getRandom(logs["hit"].length - 1)]
         .replace("[playerKick]", player1.name)
         .replace("[playerDefence]", player2.name);
-      const el = `<p>${time} ${textHit} -${player.value} [${player2.hp}/100]</p>`;
+      const el = `<p>${time} ${textHit} -${hitDamage} [${player2.hp}/100]</p>`;
       return $chat.insertAdjacentHTML("afterbegin", el);
 
     case "defence":
@@ -291,6 +269,7 @@ $formFight.addEventListener("submit", function (e) {
   e.preventDefault();
   fight(subzero, scorpion);
   whoWinner(subzero, scorpion);
+  console.log(subzero.attack());
 });
 
 function gameStart(player1, player2) {
