@@ -207,9 +207,6 @@ function fight(player1, player2) {
   const player = player1.attack();
   const enemy = player2.attack();
 
-  console.log("player: ", player);
-  console.log("enemy: ", enemy);
-
   if (player.hit !== enemy.defence) {
     player2.changeHP(player.value);
     player2.renderHP();
@@ -265,16 +262,15 @@ function generateLogs(type, player1, player2, hitDamage) {
   }
 }
 
-$formFight.addEventListener("submit", function (e) {
-  e.preventDefault();
-  fight(subzero, scorpion);
-  whoWinner(subzero, scorpion);
-  console.log(subzero.attack());
-});
-
 function gameStart(player1, player2) {
   $arenas.append(createPlayer(player1), createPlayer(player2));
   generateLogs("start", player1, player2);
+
+  $formFight.addEventListener("submit", function (e) {
+    e.preventDefault();
+    fight(player1, player2);
+    whoWinner(player1, player2);
+  });
 }
 
 gameStart(subzero, scorpion);
