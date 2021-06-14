@@ -108,9 +108,7 @@ function createPlayer(character) {
   return $player;
 }
 
-function getRandom(num) {
-  return Math.ceil(Math.random() * num);
-}
+const getRandom = num => Math.ceil(Math.random() * num);
 
 function formatDate(date) {
   let hours = date.getHours();
