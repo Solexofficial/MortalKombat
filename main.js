@@ -133,12 +133,11 @@ function changeHP(damageHit) {
 }
 
 function elHP() {
-  return document.querySelector('.player' + this.player + ' .life');
+  return document.querySelector(`.player${this.player} .life`);
 }
 
 function renderHP() {
-  let $el = this.elHP();
-  return ($el.style.width = this.hp + '%');
+  return (this.elHP().style.width = `${this.hp}%`);
 }
 
 function showWinner(name) {
