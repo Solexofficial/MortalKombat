@@ -83,26 +83,29 @@ function createElement(tag, className) {
 }
 
 function createPlayer(character) {
-  const player = createElement('div', 'player' + character.player);
+  const {
+    player: playerNumber,
+    name: playerName,
+    hp: playerHP,
+    img: playerIMG,
+  } = character;
 
+  const $player = createElement('div', 'player' + playerNumber);
   const $progressbar = createElement('div', 'progressbar');
-
   const $character = createElement('div', 'character');
-
   const $life = createElement('div', 'life');
-  $life.style.width = character.hp + '%';
-
   const $name = createElement('div', 'name');
-  $name.innerText = character.name;
-
   const $img = createElement('img');
-  $img.src = character.img;
 
-  player.append($progressbar, $character);
+  $life.style.width = `${playerHP}%`;
+  $name.innerText = playerName;
+  $img.src = playerIMG;
+
+  $player.append($progressbar, $character);
   $progressbar.append($life, $name);
   $character.append($img);
 
-  return player;
+  return $player;
 }
 
 function getRandom(num) {
@@ -276,5 +279,3 @@ function gameStart(player1, player2) {
 }
 
 gameStart(subzero, scorpion);
-
-// homework-7 init
