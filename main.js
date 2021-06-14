@@ -276,3 +276,5 @@ function gameStart(player1, player2) {
 }
 
 gameStart(subzero, scorpion);
+
+// homework-7 init
