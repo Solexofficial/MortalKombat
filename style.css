@@ -180,6 +180,10 @@ body {
   background-size: cover;
   background-position: center;
   border-top: 4px solid #f5d100;
+  padding: 6px 40px;
+  overflow: scroll;
+  color: white;
+  font-family: Arial;
 }
 
 .character {
@@ -303,6 +307,7 @@ body {
 }
 
 form:invalid button[class="button"] {
+  pointer-events: none;
   opacity: 0.9;
   cursor: not-allowed;
 }
