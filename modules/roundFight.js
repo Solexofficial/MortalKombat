@@ -1,4 +1,3 @@
-// import { getRandom } from './utils.js';
 import generateLogs from './logs.js';
 
 function roundFight(player1, player2) {
