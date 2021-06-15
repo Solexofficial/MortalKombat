@@ -1,5 +1,5 @@
 import { getRandom } from './utils.js';
-const $formFight = document.querySelector('.control');
+import { $formFight } from './gameScene.js';
 const HIT = {
   head: 30,
   body: 25,
