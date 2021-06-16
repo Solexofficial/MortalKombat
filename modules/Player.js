@@ -8,6 +8,7 @@ class Player {
     this.player = props.player;
     this.selector = `player${this.player}`;
     this.rootSelector = props.rootSelector;
+    this.attack = props.attack;
   }
 
   changeHP = damageHit => {
@@ -15,15 +16,14 @@ class Player {
     if (this.hp < 0) {
       this.hp = 0;
     }
-    return this.hp;
   };
 
   elHP = () => {
-    return document.querySelector(`${this.selector} .life`);
+    return document.querySelector(`.${this.selector} .life`);
   };
 
   renderHP = () => {
-    return (this.elHP().style.width = `${this.hp}%`);
+    this.elHP().style.width = `${this.hp}%`;
   };
 
   createPlayer = () => {
