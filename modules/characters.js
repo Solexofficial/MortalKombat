@@ -2,7 +2,7 @@ import { playerAttack, enemyAttack } from './playerActions.js';
 
 import Player from './Player.js';
 
-const player1 = new Player({
+const subzero = new Player({
   player: 1,
   name: 'Subzero',
   hp: 100,
@@ -11,7 +11,7 @@ const player1 = new Player({
   attack: playerAttack,
 });
 
-const player2 = new Player({
+const scorpion = new Player({
   player: 2,
   name: 'Scorpion',
   hp: 100,
@@ -20,4 +20,4 @@ const player2 = new Player({
   attack: enemyAttack,
 });
 
-export { player1, player2 };
+export { subzero, scorpion };
