@@ -8,7 +8,7 @@ const createElement = (tag, className) => {
   return $tag;
 };
 
-function formatDate(date) {
+const formatDate = date => {
   let hours = date.getHours();
   let minutes = date.getMinutes();
   let seconds = date.getSeconds();
@@ -18,6 +18,6 @@ function formatDate(date) {
   seconds = seconds < 10 ? '0' + seconds : seconds;
 
   return `${hours}:${minutes}:${seconds}`;
-}
+};
 
 export { getRandom, createElement, formatDate };
