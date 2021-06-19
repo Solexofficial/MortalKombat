@@ -1,25 +1,51 @@
-import { subzero, scorpion } from './characters.js';
+import Player from './Player.js';
+import { playerAttack, enemyAttack } from './playerActions.js';
 import generateLogs from './logs.js';
 import { roundFight } from './roundFight.js';
 import { checkWinner } from './roundEnd.js';
 import { $formFight } from './gameScene.js';
+import { getRandom } from './utils.js';
 
 class Game {
-  constructor() {
-    this.player1 = subzero;
-    this.player2 = scorpion;
-  }
+  getPlayers = async () => {
+    const body = fetch(
+      'https://reactmarathon-api.herokuapp.com/api/mk/players'
+    ).then(res => res.json());
+    return body;
+  };
 
-  start = () => {
-    this.player1.createPlayer();
-    this.player2.createPlayer();
-    generateLogs('start', this.player1, this.player2);
+  getRandomEnemy = async () => {
+    const body = fetch(
+      'https://reactmarathon-api.herokuapp.com/api/mk/player/choose'
+    ).then(res => res.json());
+    return body;
+  };
+
+  start = async () => {
+    const players = await this.getPlayers();
+    const p1 = players[getRandom(players.length - 1)];
+    const p2 = await this.getRandomEnemy();
+    const player1 = new Player({
+      ...p1,
+      player: 1,
+      rootSelector: 'arenas',
+      attack: playerAttack,
+    });
+    const player2 = new Player({
+      ...p2,
+      player: 2,
+      rootSelector: 'arenas',
+      attack: enemyAttack,
+    });
+
+    player1.createPlayer();
+    player2.createPlayer();
+    generateLogs('start', player1, player2);
 
     $formFight.addEventListener('submit', event => {
       event.preventDefault();
-
-      roundFight(this.player1, this.player2);
-      checkWinner(this.player1, this.player2);
+      roundFight(player1, player2);
+      checkWinner(player1, player2);
     });
   };
 }
