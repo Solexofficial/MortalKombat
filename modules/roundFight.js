@@ -1,5 +1,4 @@
 import generateLogs from './logs.js';
-// import { getFight } from './playerActions.js';
 import { $formFight } from './gameScene.js';
 import { getRandom } from './utils.js';
 
@@ -9,78 +8,51 @@ const HIT = {
   foot: 20,
 };
 
-async function playerAttack() {
-  const attack = {};
-
-  for (let item of $formFight) {
-    if (item.checked && item.name === 'hit') {
-      attack.value = getRandom(HIT[item.value]);
-      attack.hit = item.value;
-    }
-
-    if (item.checked && item.name === 'defence') {
-      attack.defence = item.value;
-    }
-    item.checked = false;
-  }
-  return attack;
-}
-
-// async function getPlayerAttack() {
-//   await playerAttack();
-//   console.log('start');
-//   const q = new Promise(resolve => {
-//     const playerATK = playerAttack();
-//     resolve(playerATK);
-//   });
-//   console.log('wait');
-//   await q;
-//   console.log('finish');
-//   return q;
-// }
-// getPlayerAttack().then(res => console.log('getPlayerThen', res));
-
 function roundFight(player1, player2) {
+  let playerATK, player, enemy;
   async function getPlayerAttack() {
-    await playerAttack();
-    console.log('start');
-    const q = new Promise(resolve => {
-      const playerATK = playerAttack();
-      resolve(playerATK);
-    });
-    console.log('wait');
-    await q;
-    console.log('finish');
-    return q;
-  }
-  getPlayerAttack().then(res => console.log('getPlayerThen', res));
+    const attack = {};
 
-  let result = {};
-  player1
-    .attack()
-    .then(data => {
-      const { hit, defence } = data;
-      const playersActions = fetch(
-        'http://reactmarathon-api.herokuapp.com/api/mk/player/fight',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            hit,
-            defence,
-          }),
-        }
-      );
-      return playersActions;
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log('data', data);
-      const { player1: player, player2: enemy } = data;
-      console.log(player, enemy);
-    })
-    .catch(err => console.log(err));
+    for (let item of $formFight) {
+      if (item.checked && item.name === 'hit') {
+        attack.value = getRandom(HIT[item.value]);
+        attack.hit = item.value;
+      }
+
+      if (item.checked && item.name === 'defence') {
+        attack.defence = item.value;
+      }
+      item.checked = false;
+    }
+    return attack;
+  }
+  getPlayerAttack().then(resolve => (playerATK = resolve));
+
+  async function getEnemyAttack() {
+    await getPlayerAttack();
+    const { hit, defence } = playerATK;
+    const body = fetch(
+      'http://reactmarathon-api.herokuapp.com/api/mk/player/fight',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          hit,
+          defence,
+        }),
+      }
+    ).then(res => res.json());
+    return body;
+  }
+
+  getEnemyAttack().then(data => {
+    console.log('###get enemy data player1', data.player1);
+    console.log('###get enemy data player2', data.player2);
+    player = data.player1;
+    enemy = data.player2;
+  });
 
   async function getAction() {
+    await getEnemyAttack();
     if (player.hit !== enemy.defence) {
       player2.changeHP(player.value);
       player2.renderHP();
@@ -97,6 +69,7 @@ function roundFight(player1, player2) {
       generateLogs('defence', player2, player1);
     }
   }
+  getEnemyAttack().then(data => getAction());
 }
 
 export { roundFight };
