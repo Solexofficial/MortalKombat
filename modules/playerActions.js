@@ -6,9 +6,7 @@ const HIT = {
   foot: 20,
 };
 
-const ATTACK = ['head', 'body', 'foot'];
-
-function playerAttack() {
+async function playerAttack() {
   const attack = {};
 
   for (let item of $formFight) {
@@ -22,18 +20,33 @@ function playerAttack() {
     }
     item.checked = false;
   }
-
   return attack;
 }
 
+const enemy = async function getFight() {
+  const q = fetch(
+    'http://reactmarathon-api.herokuapp.com/api/mk/player/fight',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        hit: null,
+        defence: null,
+      }),
+    }
+  );
+  q.then(response => {
+    return response.json();
+  }).then(data => {
+    const player1 = data.player1;
+    const player2 = data.player2;
+    console.log('###data1', player1);
+    console.log('###data2', player2);
+    return player2;
+  });
+};
+
 function enemyAttack() {
-  const hit = ATTACK[getRandom(3) - 1];
-  const defence = ATTACK[getRandom(3) - 1];
-  return {
-    value: getRandom(HIT[hit]),
-    hit,
-    defence,
-  };
+  return console.log('enemy');
 }
 
 export { playerAttack, enemyAttack };
