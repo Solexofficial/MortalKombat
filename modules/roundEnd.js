@@ -26,7 +26,7 @@ function showWinner(name) {
 function showReloadButton() {
   const $reloadBtn = createReloadButton();
   $reloadBtn.addEventListener('click', () => {
-    window.location.reload();
+    window.location.pathname = 'index.html';
   });
   return $arenas.append($reloadBtn);
 }
