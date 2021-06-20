@@ -1,5 +1,4 @@
 import Player from './Player.js';
-import { playerAttack, enemyAttack } from './playerActions.js';
 import generateLogs from './logs.js';
 import { roundFight } from './roundFight.js';
 import { checkWinner } from './roundEnd.js';
@@ -27,13 +26,11 @@ class Game {
       ...p1,
       player: 1,
       rootSelector: 'arenas',
-      attack: playerAttack,
     });
     const player2 = new Player({
       ...p2,
       player: 2,
       rootSelector: 'arenas',
-      attack: enemyAttack,
     });
 
     player1.createPlayer();
