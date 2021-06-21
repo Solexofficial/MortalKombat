@@ -28,7 +28,7 @@ class Player {
 
   createPlayer = () => {
     const $player = createElement('div', this.selector);
-    const $progressbar = createElement('div', 'progressbar');
+    const $progressBar = createElement('div', 'progressBar');
     const $character = createElement('div', 'character');
     const $life = createElement('div', 'life');
     const $name = createElement('div', 'name');
@@ -38,8 +38,8 @@ class Player {
     $name.innerText = this.name;
     $img.src = this.img;
 
-    $player.append($progressbar, $character);
-    $progressbar.append($life, $name);
+    $player.append($progressBar, $character);
+    $progressBar.append($life, $name);
     $character.append($img);
 
     const $root = document.querySelector(`.${this.rootSelector}`);

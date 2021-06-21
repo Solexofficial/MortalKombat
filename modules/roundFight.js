@@ -1,9 +1,47 @@
 import generateLogs from './logs.js';
+import { $formFight } from './gameScene.js';
+import { getRandom } from './utils.js';
 
-function roundFight(player1, player2) {
-  const player = player1.attack();
-  const enemy = player2.attack();
+const HIT = {
+  head: 30,
+  body: 25,
+  foot: 20,
+};
 
+const roundFight = async (player1, player2) => {
+  const getPlayerAttack = async () => {
+    const attack = {};
+
+    for (let item of $formFight) {
+      if (item.checked && item.name === 'hit') {
+        attack.value = getRandom(HIT[item.value]);
+        attack.hit = item.value;
+      }
+
+      if (item.checked && item.name === 'defence') {
+        attack.defence = item.value;
+      }
+      item.checked = false;
+    }
+    return attack;
+  };
+
+  const getEnemyAttack = async () => {
+    const { hit, defence } = await getPlayerAttack();
+    const body = fetch(
+      'http://reactmarathon-api.herokuapp.com/api/mk/player/fight',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          hit,
+          defence,
+        }),
+      }
+    ).then(res => res.json());
+    return body;
+  };
+
+  const { player1: player, player2: enemy } = await getEnemyAttack();
   if (player.hit !== enemy.defence) {
     player2.changeHP(player.value);
     player2.renderHP();
@@ -19,6 +57,6 @@ function roundFight(player1, player2) {
   } else {
     generateLogs('defence', player2, player1);
   }
-}
+};
 
 export { roundFight };
