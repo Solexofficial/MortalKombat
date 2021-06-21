@@ -5,13 +5,6 @@ import { checkWinner } from './roundEnd.js';
 import { $formFight } from './gameScene.js';
 
 class Game {
-  getPlayers = async () => {
-    const body = fetch(
-      'https://reactmarathon-api.herokuapp.com/api/mk/players'
-    ).then(res => res.json());
-    return body;
-  };
-
   getRandomEnemy = async () => {
     const body = fetch(
       'https://reactmarathon-api.herokuapp.com/api/mk/player/choose'
@@ -37,9 +30,9 @@ class Game {
     player2.createPlayer();
     generateLogs('start', player1, player2);
 
-    $formFight.addEventListener('submit', event => {
+    $formFight.addEventListener('submit', async event => {
       event.preventDefault();
-      roundFight(player1, player2);
+      await roundFight(player1, player2);
       checkWinner(player1, player2);
     });
   };
