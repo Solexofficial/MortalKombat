@@ -2,7 +2,8 @@ import Player from './Player.js';
 import generateLogs from './logs.js';
 import { roundFight } from './roundFight.js';
 import { checkWinner } from './roundEnd.js';
-import { $formFight } from './gameScene.js';
+import { $formFight, $arenas } from './gameScene.js';
+import { getRandom } from './utils.js';
 
 class Game {
   getRandomEnemy = async () => {
@@ -25,7 +26,7 @@ class Game {
       player: 2,
       rootSelector: 'arenas',
     });
-
+    $arenas.classList.add(`arena${getRandom(6)}`);
     player1.createPlayer();
     player2.createPlayer();
     generateLogs('start', player1, player2);
