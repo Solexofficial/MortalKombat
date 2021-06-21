@@ -8,9 +8,8 @@ const HIT = {
   foot: 20,
 };
 
-function roundFight(player1, player2) {
-  let playerATK, player, enemy;
-  async function getPlayerAttack() {
+const roundFight = async (player1, player2) => {
+  const getPlayerAttack = async () => {
     const attack = {};
 
     for (let item of $formFight) {
@@ -25,12 +24,10 @@ function roundFight(player1, player2) {
       item.checked = false;
     }
     return attack;
-  }
-  getPlayerAttack().then(resolve => (playerATK = resolve));
+  };
 
-  async function getEnemyAttack() {
-    await getPlayerAttack();
-    const { hit, defence } = playerATK;
+  const getEnemyAttack = async () => {
+    const { hit, defence } = await getPlayerAttack();
     const body = fetch(
       'http://reactmarathon-api.herokuapp.com/api/mk/player/fight',
       {
@@ -42,34 +39,24 @@ function roundFight(player1, player2) {
       }
     ).then(res => res.json());
     return body;
+  };
+
+  const { player1: player, player2: enemy } = await getEnemyAttack();
+  if (player.hit !== enemy.defence) {
+    player2.changeHP(player.value);
+    player2.renderHP();
+    generateLogs('hit', player1, player2, player.value);
+  } else {
+    generateLogs('defence', player1, player2);
   }
 
-  getEnemyAttack().then(data => {
-    console.log('###get enemy data player1', data.player1);
-    console.log('###get enemy data player2', data.player2);
-    player = data.player1;
-    enemy = data.player2;
-  });
-
-  async function getAction() {
-    await getEnemyAttack();
-    if (player.hit !== enemy.defence) {
-      player2.changeHP(player.value);
-      player2.renderHP();
-      generateLogs('hit', player1, player2, player.value);
-    } else {
-      generateLogs('defence', player1, player2);
-    }
-
-    if (enemy.hit !== player.defence) {
-      player1.changeHP(enemy.value);
-      player1.renderHP();
-      generateLogs('hit', player2, player1, enemy.value);
-    } else {
-      generateLogs('defence', player2, player1);
-    }
+  if (enemy.hit !== player.defence) {
+    player1.changeHP(enemy.value);
+    player1.renderHP();
+    generateLogs('hit', player2, player1, enemy.value);
+  } else {
+    generateLogs('defence', player2, player1);
   }
-  getEnemyAttack().then(data => getAction());
-}
+};
 
 export { roundFight };
