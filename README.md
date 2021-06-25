@@ -10,5 +10,6 @@
 8. ES6( arrow fn, fetch, destructuring, spread/rest)
 9. DOM elements
 10. forms in JS.
+11. export/import ES6
 
 ## deploy: https://thirsty-joliot-c59a7b.netlify.app/
